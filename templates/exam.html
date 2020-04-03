@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{# 页面标题 #}
+
+{% block title %}
+   {{ article_obj.title }}
+{% endblock %}
+{% load static %}
+{% block headers_extends %}
+<link rel="stylesheet" href="{% static 'css/test.css' %}">
+{% endblock %}
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class=" col-sm-8 col-md-8">
+            <div class="panel panel-default">
+              <div class="panel-heading">{% block blog_list_title%}
+               文章列表{% endblock %}
+              </div>
+        <div class="panel-body">
+    <ul>
+        <form action="{% url 'examgrade' %}" method="post">
+            {% csrf_token %}
+            {% for paper1 in exam %}
+                {% for test in paper1.pid.all %}
+                    <li id="{{ forloop.counter }}">
+                        <div class="test_content_nr_tt">
+                            <i>{{ forloop.counter }}</i>
+                            <font>{{ test.title }}</font>
+                        </div>
+                        <div class="test_content_nr_main">
+                            <ul>
+                                <li class="option">
+                                    <input type="radio" class="radioOrCheck" name="{{ test.id }}"
+                                           value="1"/>
+                                    <label>A.
+                                        <p class="ue" style="display: inline;">{{ test.optionA }}</p>
+                                    </label>
+                                </li>
+
+                                <li class="option">
+                                    <input type="radio" class="radioOrCheck" name="{{ test.id }}"
+                                           value="2"/>
+                                    <label>
+                                        B.<p class="ue" style="display: inline;">{{ test.optionB }}</p>
+                                    </label>
+                                </li>
+
+                                <li class="option">
+                                    <input type="radio" class="radioOrCheck" name="{{ test.id }}"
+                                           value="3"/>
+                                    <label>
+                                        C.<p class="ue" style="display: inline;">{{ test.optionC }}</p>
+                                    </label>
+                                </li>
+
+                                <li class="option">
+                                    <input type="radio" class="radioOrCheck" name="{{ test.id }}"
+                                           value="4"/>
+                                    <label>
+                                        D.<p class="ue" style="display: inline;">{{ test.optionD }}</p>
+                                    </label>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+            <input type="hidden" name="sid" value="{{ user.id }}">
+            <li><input type="submit" value="提交" class="btn btn-primary pull-right"></li>
+        </form>
+    </ul>
+        </div>
+            </div>
+        </div>
+    </div>
+ </div>
+{% endblock %}

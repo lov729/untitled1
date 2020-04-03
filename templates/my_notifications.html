@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    我的网站|signal
+{% endblock %}
+{% block nav-home-active%}active{% endblock %}
+{% block headers_extends %}
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+          <a href="{% url 'notifications:mark_all_as_read' %}?next={% url 'my_notifications' %}" class="btn btn-primary">全部标记已读</a>
+      <a href="{% url 'del_notification' %}" class="btn btn-danger">删除已读消息</a>
+      <ul class="notification">
+          {% for notification in request.user.notifications.all %}
+           <li class="{% if not notification.unread %}read{% endif %}">[{{notification.timesince  }}]
+             <a href=" {% url 'my_notification' notification.pk %}"> {{ notification.verb }}</a>
+           </li>
+       {% empty %}
+           暂无消息
+       {% endfor %}
+      </ul>
+      </div>
+    </div>
+    </div>
+{% endblock %}

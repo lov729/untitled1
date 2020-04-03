@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    我的网站|首页
+{% endblock %}
+{% block nav-home-active%}active{% endblock %}
+{% block headers_extends %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+{% endblock %}
+{% block content %}
+<div class=" bs-example" data-example-id="simple-jumbotron">
+<div class="jumbotron">
+ <h1>欢迎访问我的网站</h1>
+    <p>如果你表现得“好像”对自己的工作感兴趣，那一点表现就会使你的兴趣变得真实，还会减少你的疲惫、你的紧张，以及你的忧虑。
+    </p>
+  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+</div>
+</div>
+    <a href="{% url 'exam' %}">测试</a>
+     <!-- 图表容器 DOM -->
+    <div id="container" style="width: 600px;height:400px;"></div>
+    <div class="hot_dot">
+      <!-- 今天热门博客-->
+    <h3>今日热门</h3>
+     <ul>
+    {% for hot_data in today_hot_dot %}
+        <li><a href="{% url 'article_detail' hot_data.content_object.pk %}">
+            {{ hot_data.content_object.title }}</a>({{ hot_data.read_num }})
+        </li>
+
+    {% empty %}
+        今天暂无
+    {% endfor %}
+    </ul>
+    </div>
+    <div class="hot_dot">
+     <h3>昨日热门</h3>
+    <ul>
+    {% for hot_data in yes_hot_dot %}
+        <li><a href="{% url 'article_detail' hot_data.content_object.pk %}">
+            {{ hot_data.content_object.title }}</a>({{ hot_data.read_num }})
+        </li>
+
+    {% empty %}
+        昨天暂无
+    {% endfor %}
+    </ul>
+    </div>
+    <div class="hot_dot">
+    <h3>近一周热门</h3>
+    <ul>
+    {% for hot_data in hot_dot_week %}
+        <li><a href="{% url 'article_detail' hot_data.id %}">
+            {{ hot_data.title }}</a>({{ hot_data.read_num_sum}})
+        </li>
+
+    {% empty %}
+       本周暂无
+    {% endfor %}
+    </ul>
+    </div>
+
+    <script>
+        // 图表配置
+        var options = {
+            chart: {
+                type: 'line' //指定图表的类型，默认是折线图（line）
+            },
+            title: {
+                text: null                // 标题
+            },
+            xAxis: {
+                categories: {{ dates|safe }} ,  // x 轴分类
+                tickmarkPlacement: 'on'
+            },
+            yAxis: {
+                title: {
+                    text: null               // y 轴标题
+                },
+                labels:{
+                    enabled:false
+                },
+                gridLineDashStyle:'Dash',
+            },
+            series: [{                              // 数据列
+                name: '流量',                        // 数据列名
+                data: {{ read_nums }}                     // 数据
+            }],
+            plotOptions: {
+                line:{
+                    dataLabels:{
+                        enabled:true
+                    }
+                }
+            },
+            legend:{enabled:false},
+            credits:{enabled: false},
+
+        };
+        // 图表初始化函数
+        var chart = Highcharts.chart('container', options);
+      function check(event) {
+            var search=document.getElementById('search');
+            if (search.value==''){
+                event.preventDefault();
+            }
+        }
+    </script>
+{% endblock %}

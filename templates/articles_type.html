@@ -1,0 +1,11 @@
+{% extends 'articles_list.html' %}
+{# 页面标题 #}
+{% block title %}
+    {{ blog_type.type_name}}
+{% endblock %}
+{% block blog_list_title %}
+   {{ blog_type.type_name }}
+    <a href="{% url 'article_list' %}">查看全部</a>
+{% endblock %}
+{# 页面内容 #}
+

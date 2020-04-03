@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}
+    个人资料
+{% endblock %}
+{% block nav-home-active%}active{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <h2>{{ user.username }}</h2>
+
+            <ul>
+                <li>昵称:{{ user.get_nickname_or_username }}<a href="{% url 'changenick' %}?from={{ request.get_full_path }}">
+                    修改昵称</a>
+                </li>
+                <li><span>当前积分--{{ int.integral }}</span></li>
+                <li>邮箱:{% if user.email %}{{ user.email }}{% else %}未绑定<a href="{% url 'bindemail' %}?from={{ request.get_full_path }}">
+                    去绑定</a> {% endif %}
+                </li>
+                <li>最后一次登陆:{{ user.last_login|date:"Y-m-d" }}</li>
+                <li><a href="{% url 'change_password' %}?from={{ request.get_full_path }}" >修改密码</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
